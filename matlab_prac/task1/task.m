@@ -185,13 +185,29 @@ disp(k / n);
 
 %% task12
 
-x = linspace(0.001, 15, 1001);
-y = sin(x) ./ x;
-yr = rectangles(x, y);
-trapz(x, y);
-simpson(x, y);
+REP = 50;
+FROM = 0;
+TO = 15;
+diffs = cumprod(0.5 * ones(1, 16));
 
-plot(x, y);
+err_r = ones(1, numel(diffs));
+err_t = ones(1, numel(diffs));
+err_s = ones(1, numel(diffs));
+time_r = ones(1, numel(diffs));
+time_t = ones(1, numel(diffs));
+time_s = ones(1, numel(diffs));
+
+for h = diffs
+    x = FROM:h:TO;
+    X = repmat(x, numel(x), 1);
+    Y = tril(sin(X) ./ X);
+    Y(isnan(Y)) = 1;
+    yr = rectangles(h, Y);
+    yt = trapz(h, Y, 2);
+    ys = simpson(h, Y);
+end
+
+plot(x, yr, x, yt, x, ys);
 
 %% task13
 

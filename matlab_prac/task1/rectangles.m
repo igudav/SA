@@ -1,6 +1,3 @@
-function s = rectangles(x, y)
-    % left rectangles
-    y = y(1:end - 1);
-    dx = diff(x);
-    s = sum(dx .* y);
+function s = rectangles(h, Y)
+    s = sum(h .* Y, 2);
 end
