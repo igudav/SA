@@ -185,29 +185,75 @@ disp(k / n);
 
 %% task12
 
-REP = 50;
+REP = 20;
 FROM = 0;
 TO = 15;
-diffs = cumprod(0.5 * ones(1, 16));
+H_PLOT = 1 / 8;
+MEAS_NUM_STEPS = 17;
 
-err_r = ones(1, numel(diffs));
-err_t = ones(1, numel(diffs));
-err_s = ones(1, numel(diffs));
-time_r = ones(1, numel(diffs));
-time_t = ones(1, numel(diffs));
-time_s = ones(1, numel(diffs));
+% plotting antiderivative
 
-for h = diffs
-    x = FROM:h:TO;
-    X = repmat(x, numel(x), 1);
-    Y = tril(sin(X) ./ X);
-    Y(isnan(Y)) = 1;
-    yr = rectangles(h, Y);
-    yt = trapz(h, Y, 2);
-    ys = simpson(h, Y);
+x = FROM:H_PLOT:TO;
+X = repmat(x, numel(x), 1);
+Y = tril(sin(X) ./ X);
+Y(isnan(Y)) = 1;
+yr = rectangles(H_PLOT, Y);
+yt = trapz(H_PLOT, Y, 2);
+ys = simpson(H_PLOT, Y);
+subplot(2, 2, [1 2]);
+plot(x, yr, x, yt, x, ys);
+title('$$\int\limits_0^x \frac{\sin{x}}{x}\,dx$$', 'interpreter', 'latex');
+xlabel('x');
+ylabel('Si(x)');
+legend('rectangles', 'trapz', 'simpson');
+
+% measuring errors and time
+
+res_r = ones(1, MEAS_NUM_STEPS);
+res_t = ones(1, MEAS_NUM_STEPS);
+res_s = ones(1, MEAS_NUM_STEPS);
+time_r = ones(REP, MEAS_NUM_STEPS);
+time_t = ones(REP, MEAS_NUM_STEPS);
+time_s = ones(REP, MEAS_NUM_STEPS);
+diffs = cumprod(0.5 * ones(1, MEAS_NUM_STEPS));
+
+for i = 1:MEAS_NUM_STEPS;
+    x = FROM:diffs(i):TO;
+    y = sin(x) ./ x;
+    y(isnan(y)) = 1;
+    for j = 1:REP
+        tic();
+        res_r(i) = rectangles(diffs(i), y);
+        time_r(j, i) = toc();
+
+        tic();
+        res_t(i) = trapz(diffs(i), y);
+        time_t(j, i) = toc();
+
+        tic();
+        res_s(i) = simpson(diffs(i), y);
+        time_s(j, i) = toc();
+    end
 end
 
-plot(x, yr, x, yt, x, ys);
+time_r = median(time_r);
+time_t = median(time_t);
+time_s = median(time_s);
+err_r = abs(diff(res_r));
+err_t = abs(diff(res_t));
+err_s = abs(diff(res_s));
+
+subplot(2, 2, 3);
+loglog(diffs, time_r, diffs, time_t, diffs, time_s);
+legend('rectangles', 'trapz', 'simpson');
+xlabel('h');
+ylabel('time');
+
+subplot(2, 2, 4);
+loglog(diffs(2:end), err_r, diffs(2:end), err_t, diffs(2:end), err_s);
+legend('rectangles', 'trapz', 'simpson');
+xlabel('h');
+ylabel('error');
 
 %% task13
 
