@@ -197,12 +197,12 @@ x = FROM:H_PLOT:TO;
 X = repmat(x, numel(x), 1);
 Y = tril(sin(X) ./ X);
 Y(isnan(Y)) = 1;
-yr = rectangles(H_PLOT, Y);
+yr = rectangles(H_PLOT, Y, 2);
 yt = trapz(H_PLOT, Y, 2);
-ys = simpson(H_PLOT, Y);
+ys = simpson(H_PLOT, Y, 2);
 subplot(2, 2, [1 2]);
 plot(x, yr, x, yt, x, ys);
-title('$$\int\limits_0^x \frac{\sin{x}}{x}\,dx$$', 'interpreter', 'latex');
+title('$$\int\limits_0^x \frac{\sin{t}}{t}\,dt$$', 'interpreter', 'latex');
 xlabel('x');
 ylabel('Si(x)');
 legend('rectangles', 'trapz', 'simpson');
@@ -248,24 +248,27 @@ loglog(diffs, time_r, diffs, time_t, diffs, time_s);
 legend('rectangles', 'trapz', 'simpson');
 xlabel('h');
 ylabel('time');
+title('computation time');
 
 subplot(2, 2, 4);
 loglog(diffs(2:end), err_r, diffs(2:end), err_t, diffs(2:end), err_s);
 legend('rectangles', 'trapz', 'simpson');
 xlabel('h');
 ylabel('error');
+title('internal convergance speed')
 
 %% task13
 
-MIN_DX = -4;
+MIN_DX = -8;
 MAX_DX = 0;
 POINTS = 1000;
 
 der0 = cos(pi / 4);
 dx = logspace(MIN_DX, MAX_DX, POINTS);
 y = repmat(sin(pi / 4), 1,  POINTS);
-der_right = (sin(pi / 4 + dx) - y) ./ dx;
-der_centr = (sin(pi / 4 + dx) - sin(pi / 4 - dx)) ./ (2 * dx);
+f_x_plus_dx = sin(pi / 4 + dx);
+der_right = (f_x_plus_dx  - y) ./ dx;
+der_centr = (f_x_plus_dx - sin(pi / 4 - dx)) ./ (2 * dx);
 
 loglog(dx, abs(der0 - der_right), dx, abs(der0 - der_centr));
 legend('right diff', 'central diff');
