@@ -1,0 +1,80 @@
+% пакеты
+
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{subfiles}
+%\usepackage{ulem}
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{enumerate}
+
+% царский inkscape
+
+\usepackage{import}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{xcolor}
+
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+% отступы
+
+\textheight=24cm
+\textwidth=16cm
+\oddsidemargin=0pt
+\topmargin=-1.5cm
+\parindent=24pt
+\parskip=0pt
+\tolerance=2000
+\flushbottom
+
+% окружения
+
+\newtheorem{Th}{Теорема}[section]
+\newtheorem{Lem}[Th]{Лемма}
+\newtheorem{St}[Th]{Утверждение}
+\newtheorem{Ex}{Пример}
+\newtheorem{Def}[Th]{Определение}
+\newenvironment{Proof}{\textbf{Доказательство. }}{\hfill$\blacksquare$} 
+\newenvironment{Note}{\par\noindent{\bf Замечание}}{}
+
+% команды
+
+\usetikzlibrary{patterns}
+
+\font\uwavefont=lasyb10 scaled 652
+
+\usepackage[normalem]{ulem} % uline
+\makeatletter
+\newcommand\colordashline[1][red!70]{\bgroup \markoverwith{\lower4.8\p@\hbox{\sixly\textcolor{#1}{\char58}}}\ULon}
+\font\sixly=lasyb10 scaled 900
+\makeatother
+
+\newcommand{\mdef}[1]{\emph{\colordashline{#1}}}
+
+\newcommand\eqdef{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\scriptsize def}}}{=}}}
+
+\newcommand\iffdef{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\scriptsize def}}}{\iff}}}
+
+% русская традиция обозначений
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\kappa}{\varkappa}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\ge}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\le}{\leqslant}
+\renewcommand{\emptyset}{\varnothing}
+
+\newcommand*{\hm}[1]{\nobreak\discretionary{}%
+    {\hbox{$\mathsurround=0pt #1$}}{}}

@@ -63,3 +63,26 @@ legend('$\ln(x)$ prior', '$\ln(x)$ posterior', 'interpreter', 'latex');
 subplot(2, 1, 2);
 plot(xq, BIAS2 * ones(size(xq)), 'o', xq, abs(y2_th - y2_interp));
 legend('$x^2$ prior', '$x^2$ posterior', 'interpreter', 'latex');
+
+%% task5
+
+%% task8
+
+drawSet(@rhoCircle, 10);
+drawSet(@rhoCircle, 100);
+drawSet(@rhoSquareDiag, 10);
+drawSet(@rhoSquareDiag, 100);
+
+%% task9
+
+opts = optimoptions('fmincon', 'display', 'none', 'algorithm', 'sqp');
+f = @(x) sum(x .^ 2) - 1e-7;
+drawSet(supportLebesgue(f, opts), 100);
+
+opts = optimoptions('fmincon', 'display', 'none', 'algorithm', 'interior-point');
+f = @(x) exp(sum(abs(x))) - 10;
+drawSet(supportLebesgue(f, opts), 20);
+
+opts = optimoptions('fmincon', 'display', 'none', 'algorithm', 'interior-point');
+f = @(x) exp((x(1) - 3 * x(2)) ^ 2 + x(1) ^ 4) - 10;
+drawSet(supportLebesgue(f, opts), 100);
