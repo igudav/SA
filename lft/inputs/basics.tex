@@ -1,0 +1,65 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Введение}
+
+\begin{Def}\label{def:fourSer}
+    Пусть функция $f$ ограничена на $\Real$,  $(2\pi)$-периодична и
+    интегрируема на любом конечном отрезке $[a, b] \subset \Real$.
+    Тогда \mdef{рядом Фурье} для этой функции будем называть такого крокодила:
+    \begin{equation}\label{eq:fourSer}
+        f(x) = \frac{a_0}{2} + \sum\limits_{k=1}^{\infty}
+        a_k \cos kx + b_k \sin kx
+    ,\end{equation}
+    где
+    \begin{equation}\label{eq:coeffFourSer}
+        a_k = \frac{1}{\pi}\int\limits_{-\pi}^{\pi} f(t) \cos kt \,dt \quad
+        b_k = \frac{1}{\pi}\int\limits_{-\pi}^{\pi} f(t) \sin kt \,dt 
+    .\end{equation} 
+\end{Def} 
+
+Сформулируем \mdef{достаточные условия Дирихле}:\\
+\begin{Th}
+    $f(x)$ имеет на $[-\pi, \pi]$:
+\begin{enumerate}
+    \item конечное число локальных экстремумов,
+    \item не более чем счетное число разрывов I рода.
+\end{enumerate} 
+Тогда ряд~\eqref{eq:fourSer} сходится поточечно к $\frac{f(x + 0) + f(x - 0)}{2}$.
+\end{Th}
+
+Как всем известно с десткого сада, система функций
+$\left\{ 1, \cos kx, \sin kx \right\}, k \in \Nat$ образует в пространстве
+$L_2$ полную ортогональную систему.
+Но все любят экспоненты, поэтому можно сказать, что
+\begin{equation*}
+    1 = e^{i0x}, \quad
+    \cos kx = \frac{e^{ikx} + e^{-ikx}}{2}, \quad
+    \sin kx = \frac{e^{ikx} - e^{-ikx}}{2}
+.\end{equation*} 
+
+Тогда система $\left\{ e^{ikx} \right\}, k \in \Nat$ тоже будет полной.
+Пересчитаем коэффициенты:
+
+\begin{equation*}
+    \sum\limits_{k=-\infty}^{\infty} c_k e^{ikx} = \frac{a_0}{2} +
+    \sum\limits_{k=1}^{\infty} a_k \cos kx + b_k \sin kx 
+.\end{equation*} 
+
+Отсюда методом пристальново взгляда получаем формулы для коэффициентов~$c_k$:
+\begin{align*}\label{eq:fourSerExp}
+    \begin{cases}
+    c_{-k} &= (a_k + ib_k)/2, \quad k \in \Nat, \\
+    c_0 &= a_0 / 2, \\
+    c_k &= (a_k - ib_k)/2, \quad k \in \Nat,
+    \end{cases} 
+\end{align*} 
+
+где $a_k,\ b_k$ считаются по формулам~\eqref{eq:coeffFourSer}.
+Теперь немного физической интерпретации:
+\begin{itemize}
+    \item $\left\lvert c_k \right\rvert$~---~амплитуда комплексных гармонических колебаний,
+    \item $k$~---~частота комплексных гармонических колебаний,
+    \item  $\arg c_k$~---~начальная фаза.
+\end{itemize} 
+
+\end{document} 

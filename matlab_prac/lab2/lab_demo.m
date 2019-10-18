@@ -64,6 +64,16 @@ subplot(2, 1, 2);
 plot(xq, BIAS2 * ones(size(xq)), 'o', xq, abs(y2_th - y2_interp));
 legend('$x^2$ prior', '$x^2$ posterior', 'interpreter', 'latex');
 
+%% task4
+
+a = 0;
+b = 1;
+convergenceFunc(@fn_pointwise, @flim_pointwise, a, b, 30, 'u');
+convergenceFunc(@fn_pointwise, @flim_pointwise, a, b, 30, 'm');
+convergenceFunc(@fn_meansq, @flim_meansq, a, b, 30, 'u');
+convergenceFunc(@fn_meansq, @flim_meansq, a, b, 30, 'm');
+
+
 %% task5
 
 %% task8
@@ -86,3 +96,7 @@ drawSet(supportLebesgue(f, opts), 20);
 opts = optimoptions('fmincon', 'display', 'none', 'algorithm', 'interior-point');
 f = @(x) exp((x(1) - 3 * x(2)) ^ 2 + x(1) ^ 4) - 10;
 drawSet(supportLebesgue(f, opts), 100);
+
+%% task13
+
+

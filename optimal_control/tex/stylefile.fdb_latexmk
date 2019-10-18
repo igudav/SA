@@ -1,0 +1,13 @@
+# Fdb version 3
+["pdflatex"] 1571423982 "stylefile.sty" "stylefile.pdf" "stylefile" 1571423982
+  "/etc/texmf/web2c/texmf.cnf" 1562185555 475 c0e671620eb5563b2130f56340a5fde8 ""
+  "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/public/latex-fonts/lasyb10.tfm" 1480098711 520 4bf1455197d190cb95c579bde4c2f0ba ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1551226139 34566 ab5be96bde1a5acfd4f881dbe566b5fb ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1551226139 34566 ab5be96bde1a5acfd4f881dbe566b5fb ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1562185719 4224745 0da25be4d95fc979f47e19e1bb06c0bb ""
+  "stylefile.aux" 1571423982 8 a94a2480d3289e625eea47cd1b285758 ""
+  "stylefile.sty" 1571420565 1731 15d8b1d2a151fee81df4a5f9dee440c8 ""
+  (generated)
+  "stylefile.log"
+  "stylefile.pdf"

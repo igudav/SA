@@ -4,7 +4,7 @@ function res = convergenceFunc(fn, f, a, b, n, convType)
     % m for meansqare
     
     mov(1:n) = struct('cdata', [], 'colormap', []);
-    x = a:0.05:b;
+    x = a:0.01:b;
     ee = ones(size(x));
     for k = 1:n
         yfn = fn(k, x);
@@ -14,14 +14,14 @@ function res = convergenceFunc(fn, f, a, b, n, convType)
             metr_name = '';
         elseif convType == 'u'
             ttl = num2str(max(abs(yf - yfn)));
-            metr_name = '$\max \left\lvert f_n(x) - f(x) \right\rvert = $';
+            metr_name = '$\max \left| f_n(x) - f(x) \right| = ';
         else
             ttl = num2str(sqrt(trapz(x, (yfn - yf) .^ 2)));
-            metr_name = '$\left( \int_{-1}^1(f_n(x) - f(x))^2 \,dx\right)^{1/2} = $';
+            metr_name = '$\left( \int_{-1}^1(f_n(x) - f(x))^2 \,dx\right)^{1/2} = ';
         end
         plot(x, fn(k, x), x, f(x));
         legend('$f_n(x)$', '$f(x)$', 'interpreter', 'latex');
-        title(strcat(metr_name, ttl), 'interpreter', 'latex');
+        title(strcat(metr_name, ttl, '$'), 'interpreter', 'latex');
         mov(k) = getframe();
     end
 end
