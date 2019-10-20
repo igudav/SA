@@ -76,6 +76,30 @@ convergenceFunc(@fn_meansq, @flim_meansq, a, b, 30, 'm');
 
 %% task5
 
+%% task7
+
+f1 = @(t) sin(3 * t + pi / 2);
+g1 = @(t) cos(4 * t);
+t0 = 0;
+t1 = pi;
+tt1 = linspace(t0, t1, 1000);
+p = getEqual(f1, g1, t0, t1, 7);
+plot(f1(tt1), g1(tt1), p(1, :), p(2, :), '*');
+
+p = getEqual(f1, g1, t0, t1, 100)
+plot(f1(tt1), g1(tt1), p(1, :), p(2, :), '*');
+
+f2 = @(t) sin(3 * t + pi / 4);
+g2 = @(t) cos(5 * t);
+t0 = 0;
+t1 = pi;
+tt2 = linspace(t0, t1, 1000);
+p = getEqual(f2, g2, t0, t1, 7);
+plot(f2(tt2), g2(tt2), p(1, :), p(2, :), '*');
+
+p = getEqual(f2, g2, t0, t1, 27);
+plot(f2(tt2), g2(tt2), p(1, :), p(2, :), '*');
+
 %% task8
 
 drawSet(@rhoCircle, 10);
