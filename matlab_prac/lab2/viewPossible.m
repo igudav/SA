@@ -1,17 +1,33 @@
 function viewPossible(points, P, L)
     max_dist = P / L - 1;
     N = size(points, 2);
-    p1 = repmat(shiftdim(points', -1), 3, 1);
-    p2 = repmat(permute(shiftdim(points', -1), [2 1 3]), 1, 3);
-    dists = sqrt(sum((p1 - p2) .^ 2, 3));
+    xmin = min(points(1, :)) - 5;
+    xmax = max(points(1, :)) + 5;
+    ymin = min(points(2, :)) - 5;
+    ymax = max(points(2, :)) + 5;
+    x = linspace(xmin, xmax, 1000);
+    y = linspace(ymin, ymax, 1000);
+    [X, Y] = meshgrid(x, y);
+    Z = f(X, Y);
 
-    t = linspace(0, 2 * pi, 100);
-    ngrid = 100;
-    X = repmat(points(1, :), ngrid, 1) + repmat(max_dist * cos(t'), 1, N);
-    Y = repmat(points(2, :), ngrid, 1) + repmat(max_dist * sin(t'), 1, N);
-    patch(X, Y, [0, 0.7, 0.3], 'EdgeColor', 'none');
-    hold on
-    plot(points(1, :), points(2, :), 'o');
+    save('debug.mat');
+    [M, c] = contour(X, Y, Z, [L L]);
+    c.Fill = 'on';
+    hold on;
+    scatter(points(1, :), points(2, :), '*', 'red');
     hold off;
     axis equal;
+    if M(2, 1) < size(M, 2) - 1
+        disp('Not connected');
+    else 
+        disp('Connected');
+    end
+
+    function Z = f(X, Y);
+        Z = zeros(size(X));
+        for i = 1:N
+            Z = Z + P * ones(size(X)) ./ (ones(size(X)) + (X - points(1, i)) .^ 2 +...
+                (Y - points(2, i)) .^ 2) .^ 0.5;
+        end
+    end
 end

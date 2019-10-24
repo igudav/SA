@@ -21,7 +21,8 @@ for i = 1:nFrames
     Zl = [Z(: , 2:end) NaN(N, 1)];
     mins = Z <= Zu & Z <= Zd & Z <= Zr & Z <= Zl;
     maxs = Z >= Zu & Z >= Zd & Z >= Zr & Z >= Zl;
-    surf(X, Y, Z);
+    s = surf(X, Y, Z);
+    s.EdgeColor = 'none';
     hold on;
     scatter3(X(mins), Y(mins), Z(mins), 50, 'm', '*');
     scatter3(X(maxs), Y(maxs), Z(maxs), 50, 'k', '*');

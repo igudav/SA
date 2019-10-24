@@ -85,9 +85,11 @@ t1 = pi;
 tt1 = linspace(t0, t1, 1000);
 p = getEqual(f1, g1, t0, t1, 7);
 plot(f1(tt1), g1(tt1), p(1, :), p(2, :), '*');
+axis equal;
 
-p = getEqual(f1, g1, t0, t1, 100)
+p = getEqual(f1, g1, t0, t1, 100);
 plot(f1(tt1), g1(tt1), p(1, :), p(2, :), '*');
+axis equal;
 
 f2 = @(t) sin(3 * t + pi / 4);
 g2 = @(t) cos(5 * t);
@@ -96,9 +98,25 @@ t1 = pi;
 tt2 = linspace(t0, t1, 1000);
 p = getEqual(f2, g2, t0, t1, 7);
 plot(f2(tt2), g2(tt2), p(1, :), p(2, :), '*');
+axis equal;
 
 p = getEqual(f2, g2, t0, t1, 27);
 plot(f2(tt2), g2(tt2), p(1, :), p(2, :), '*');
+axis equal;
+
+f3 = @(t) t;
+g3 = @(t) 3 * sin(1 ./ t);
+t0 = 0.5;
+t1 = 4;
+tt3 = linspace(t0, t1, 100);
+p = getEqual(f3, g3, t0, t1, 7);
+plot(f3(tt3), g3(tt3), p(1, :), p(2, :), '*');
+axis equal;
+
+p = getEqual(f3, g3, t0, t1, 15);
+plot(f3(tt3), g3(tt3), p(1, :), p(2, :), '*');
+axis equal;
+
 
 %% task8
 
@@ -121,6 +139,36 @@ opts = optimoptions('fmincon', 'display', 'none', 'algorithm', 'interior-point')
 f = @(x) exp((x(1) - 3 * x(2)) ^ 2 + x(1) ^ 4) - 10;
 drawSet(supportLebesgue(f, opts), 100);
 
+%% task10
+
+drawPolar(@rhoSquareDiag, 50);
+drawPolar(@rhoSquare, 50);
+drawPolar(@rhoCircle, 50);
+drawPolar(@rhoCircleShifted, 50);
+
 %% task13
 
+points = [-1 0 1 2 2 1 0 -1 -2; 1 1 1 0 -1 -1 -1 -1 -1];
+L = 10;
+P = 3;
+viewPossible(points, P, L);
 
+points = [-1 2; -1 2];
+L = 3;
+P = 3;
+viewPossible(points, P, L);
+
+%% task14
+
+params = struct('n', 100, 'lvl', 1, 'ecol', 'none', 'fcol', 'green');
+drawBall(2, params);
+drawBall(Inf, params);
+drawBall(4, params);
+drawBall(0.5, params);
+
+%% task15
+
+alphas = [1 2 3; 4 5 Inf];
+colors = {'red' 'blue' 'green'; 'green' 'yellow' 'magenta'};
+edges = {'none' 'none' 'none'; 'none' 'none' 'none'};
+drawManyBalls(alphas, colors, edges);

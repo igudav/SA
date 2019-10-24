@@ -18,5 +18,5 @@ function res = drawSet(rho, N)
     P = [P P(:, 1)];
     plot(Y(1, :), Y(2, :), P(1, :), P(2, :));
     axis equal;
-    legend('ext', 'int');
+    %legend('ext', 'int');
 end
