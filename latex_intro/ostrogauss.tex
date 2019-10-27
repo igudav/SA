@@ -1,0 +1,163 @@
+\documentclass[12pt, a4paper]{article} % свойства докуменат
+\usepackage[utf8]{inputenc} % хотим нормальную кодировку
+\usepackage[T2A]{fontenc} % тип шрифта, по-моему
+\usepackage[russian]{babel} % русские буквы и обозначения
+\usepackage{graphicx, xcolor} % графика
+\usepackage{subfiles} % царская разбивка на много файлов
+\usepackage{amsmath} % различные нужные символы, типа \geqslant
+\usepackage{amsthm} % для окружений типа theorem
+\usepackage{amssymb} % еще немного символов
+\usepackage{esint} % стили для интегралов, позволяет писать \oiint
+\usepackage{import} % для включения рисунков
+
+% комманда для царского добавления в документ векторной графики
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+% перенос во включенных формулах
+\newcommand*{\hm}[1]{#1 \nobreak\discretionary{}%
+    {\hbox{$\mathsurround=0pt #1$}}{}}
+
+% комманда для частной производной
+\newcommand{\dd}[2]{\frac{\partial#1}{\partial#2}}
+
+% русские знаки нестрогих неравенств
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+
+% настраиваем окружения
+\newtheorem{Th}{Теорема}
+\newenvironment{Proof}{\par\textbf{Доказательство. }}
+	{\hfill$\blacksquare$\vspace{0.1cm}} 
+
+\begin{document}
+
+\subfile{titul.tex}
+
+\section*{Формула Остроградского-Гаусса}
+
+Пусть $D$~--- односвязная область в $E^3$ (т.\,е. для любой кусочно-гладкой
+замкнутой кривой $C$ можно указать ориентированную кусочно-гладкую поверхность
+$G$, расположенную в $D$, для которой $C$ является границей).
+Пусть $S = \partial D$~--- граница этой области, удовлетворяющая условиям:
+
+\begin{enumerate}
+    \label{cond1}
+    \item Поверхность $S$~--- кусочно-гладкая двусторонняя полная ограниченная
+        замкнутая и без особых точек.
+    \label{cond2}
+    \item Прямоугольную декартову систему координат (далее ПДСК) можно выбрать
+        так, что для каждой из осей координат любая прямая, параллельная этой
+        оси, будет пересекать поверхность $S$ не более чем в двух точках.
+\end{enumerate} 
+
+Пусть $\vec{n}$~--- единичный вектор внешней нормали к $S$.
+Справедлива следующая теорема.
+
+\begin{Th}[формула Остроградского-Гаусса]
+    Пусть $\vec{a}$~--- векторное поле, дифференцируемое в области $D$,
+    удовлетворяющей условиям 1 и 2, и такое что производная по любому 
+    направлению непрерывна в $D \cup \partial D \hm= \overline{D}$.
+    Тогда справедлива формула
+    \begin{equation}\label{eq:ostrogauss}
+        \underbrace{
+            \iiint\limits_{\overline{D}} \vec{a} \, dv 
+        }_{\text{\parbox{2cm}{\scriptsize \centering интеграл от дивергенции}}} = 
+        \underbrace{
+            \oiint\limits_{\partial D} \left<\vec{a}, \vec{n} \right>\, ds
+        }_{\text{\parbox{2cm}{\scriptsize \centering поток поля через поверхность}}}
+    .\end{equation} 
+    Коротко: интеграл от дивергенции равен потоку.
+\end{Th} 
+
+\begin{Proof}
+    Все входящие в формулу~\eqref{eq:ostrogauss} функции непрерывны,
+    поэтому интегралы в обеих частях равенства существуют.
+
+    Заметим, что формула~\eqref{eq:ostrogauss} инвариантна относительно
+    выбора ПДСК, так как инвариантно все, что входит в эту формулу.
+    Поэтому достаточно доказать теорему для какой-то одной ПДСК.
+    Выберем ПДСК так, чтобы выполнялось условие 2.
+
+    Пусть $\vec{a} = \left( P, Q, R \right)^T$, 
+    $\vec{n} = (\cos \alpha, \cos \beta, \cos \gamma)^T$.
+    Тогда, учитывая, что
+    \begin{equation*}
+        \cos \alpha\, ds = dydz, \quad
+        \cos \beta\, ds = dzdx, \quad
+        \cos \gamma\, ds = dxdy, \quad
+    \end{equation*} 
+
+    получим
+
+    \begin{multline}\label{eq:ostrogauss1}\tag{1'}
+        \iiint\limits_{\overline{D}} \left( 
+            \dd Px + \dd Qy + \dd Rz
+        \right)\, dxdydz = \\
+        = \oiint\limits_{\partial D} \bigl( 
+            P\cos\alpha + Q\cos\beta + R\cos\gamma
+        \bigr)\, ds = \\
+        = \oiint\limits_{\partial D} \bigl( 
+            P\,dydz + Q\,dzdx + R\,dxdy
+        \bigr)
+    .\end{multline} 
+
+    \noindent
+    Теперь покажем, что
+
+     \begin{equation*}
+         I = \iiint\limits_{\overline{D}} \dd Rx \, dxdydz =
+         \oiint\limits_{\partial D} R\,dxdy,
+    \end{equation*} 
+
+    \begin{figure}
+        \centering
+        \incfig{ff}
+        \caption{К доказательству теоремы.}
+        \label{fig:ff} % label строго после caption!
+    \end{figure} 
+
+    \noindent
+    для остальных двух пар интегралов показывается аналогично.
+    Обозначим через $D'$ проекцию области  $D$ на плоскость  $Oxy$.
+    Через граничные точки  $D'$ проведем прямые, параллельные оси  $Oz$.
+    Каждая из этих прямых пересекается с  $\partial D$ ровно в одной точке.
+    Множество всех таких точек разделяет $\partial D$ на 2 части,
+    которые мы обозначим через  $S_1$ и  $S_2$ (см. рис.~\ref{fig:ff}).
+    Если мы проведем прямую из внутренности $D'$, параллельную  $Oz$, 
+    то она пересечет поверхность в 2 точках:  $\bigl( x, y, z_1(x, y) \bigr) \in S_1$ и $\bigl( x, y, z_2(x, y) \bigr) \in S_2$,
+    причем $z_1(x, y) \ge z_2(x, y)$.
+    Так как граница области кусочно-гладкая, то $z_1(x, y)$ и $z_2(x, y)$~---
+    кусочно-гладкие функции в $D'$.
+    По формуле сведения тройного интеграла к повторному получаем:
+
+    \begin{multline*}
+        I = \iint\limits_{D'} \left[ 
+            \int\limits_{z_2(x, y)}^{z_1(x, y)} \dd{R(x, y, z)}{z}\,dz
+        \right]\,dxdy =
+        \iint\limits_{D'} R\bigl(x, y, z_1(x, y)\bigr)\,dxdy - \\
+        - \iint\limits_{D'} R\bigl(x, y, z_2(x, y)\bigr) =
+        \iint\limits_{S_1} R(x, y, z)\,dxdy + \\
+        + \iint\limits_{S_2} R(x, y, z)\,dxdy =
+        \oiint\limits_S R(x, y, z)\,ds.
+    \end{multline*} 
+    
+    \noindent
+    Здесь мы воспользовались тем, что $S = S_1 \cup S_2$ и соотношением
+
+    \begin{equation*}
+        - \iint\limits_{D'} R\bigl(x, y, z_2(x, y)\bigr) =
+        \iint\limits_{S_2} R(x, y, z)\,dxdy =
+        \iint\limits_{S_2} R\cos\gamma \, ds,
+    \end{equation*} 
+
+    \noindent
+    справедливым в силу того, внешняя нормаль $\vec{n}$ к поверхности $S_2$
+    образует тупой угол с осью $Oz$, поэтому  $\cos\gamma < 0$.
+
+\end{Proof} 
+    
+\end{document} 
