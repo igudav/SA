@@ -34,3 +34,38 @@ for i = 1:N
 end
 plot(x ./ x_stretching, y ./ x_stretching, x ./ x_stretching, func(x));
 legend('root', 'func');
+
+%% task4
+
+bounds = [-3 3 -3 3];
+alpha = 0.1;
+init_conds = [1; 1; 0; 1];
+time = [0, 99 * pi];
+opts = odeset('Events', @(t, y) event_task4(t, y, bounds), 'MaxStep', 5e-2, 'Refine', 4);
+tres = [time(1)];
+yres = init_conds';
+te = time(1); % dummy value becauose there's no do-while loop
+i = 0;
+while ~isempty(te)
+    time(1) = te;
+    i = i + 1;
+    [t, y, te, ye, ie] = ode45(@(t, y) odefunc_task4(t, y, alpha, bounds),...
+        time, init_conds, opts);
+    nt = length(t);
+    tres = [tres; t(2:nt)];
+    yres = [yres; y(2:nt, :)];
+
+    init_conds = y(nt, :)';    
+    if ie < 3 % hit left or right bound
+        init_conds(2) = -init_conds(2);
+    else % hit floor or ceil
+        init_conds(4) = -init_conds(4);
+    end
+end
+
+ax = gca;
+ax.XLim = [bounds(1:2)];
+ax.YLim = [bounds(3:4)];
+hold on;
+comet(ax, yres(:, 1), yres(:, 3));
+
