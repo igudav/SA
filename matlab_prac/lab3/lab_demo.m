@@ -38,9 +38,9 @@ legend('root', 'func');
 %% task4
 
 bounds = [-3 3 -3 3];
-alpha = 0.1;
-init_conds = [1; 1; 0; 1];
-time = [0, 99 * pi];
+alpha = 0.15;
+init_conds = [1; 2; 0; 1];
+time = [0, 30 * pi];
 opts = odeset('Events', @(t, y) event_task4(t, y, bounds), 'MaxStep', 5e-2, 'Refine', 4);
 tres = [time(1)];
 yres = init_conds';
@@ -48,7 +48,6 @@ te = time(1); % dummy value becauose there's no do-while loop
 i = 0;
 while ~isempty(te)
     time(1) = te;
-    i = i + 1;
     [t, y, te, ye, ie] = ode45(@(t, y) odefunc_task4(t, y, alpha, bounds),...
         time, init_conds, opts);
     nt = length(t);
@@ -64,8 +63,130 @@ while ~isempty(te)
 end
 
 ax = gca;
+axis equal;
 ax.XLim = [bounds(1:2)];
 ax.YLim = [bounds(3:4)];
 hold on;
 comet(ax, yres(:, 1), yres(:, 3));
 
+%% task5
+
+G = 10;
+m1 = 1;
+m2 = 1;
+x1_0 = [-1; 0];
+x2_0 = [1; 0];
+v1_0 = [0; 1];
+v2_0 = [0; -1];
+init_conds = [x1_0; v1_0; x2_0; v2_0];
+time = [0 pi];
+opts = odeset('MaxStep', 1e-1);
+
+[t, y] = ode45(@(t, y) odefunc_task5(t, y, G, m1, m2), time, init_conds, opts);
+
+N = size(y, 1);
+mov1(1:N) = struct('cdata', [], 'colormap', []);
+
+for i = 1:N
+    plot(y(i, 1), y(i, 2), 'o', y(i, 5), y(i, 6), 'o');
+    axis equal;
+    axis([-2 2 -2 2]);
+    mov1(i) = getframe();
+end
+
+G = 16;
+m1 = 1;
+m2 = 1;
+x1_0 = [-1; 0];
+x2_0 = [1; 0];
+v1_0 = [0; 2];
+v2_0 = [0; -2];
+init_conds = [x1_0; v1_0; x2_0; v2_0];
+time = [0 pi];
+opts = odeset('MaxStep', 1e-1);
+
+[t, y] = ode45(@(t, y) odefunc_task5(t, y, G, m1, m2), time, init_conds, opts);
+
+N = size(y, 1);
+mov2(1:N) = struct('cdata', [], 'colormap', []);
+
+for i = 1:N
+    plot(y(i, 1), y(i, 2), 'o', y(i, 5), y(i, 6), 'o');
+    axis equal;
+    axis([-2 2 -2 2]);
+    mov2(i) = getframe();
+end
+
+%% task6
+
+nphi = 8;
+nr = 3;
+min_r = 0.1;
+max_r = 1.5;
+phi = (1:nphi) * 2*pi / nphi;
+r = linspace(min_r, max_r, nr);
+N = 6;
+
+funcs = {...
+    @(t, y) [-5 * y(1); -3 * y(2)],...
+    @(t, y) [2 * y(1); y(2)],...
+    @(t, y) [-2 * y(1); -2 * y(2)],...
+    @(t, y) [y(1); -y(2)],...
+    @(t, y) [y(1) - 2 * y(2); y(2) + 3 * y(1)],...
+    @(t, y) [y(2); -y(1)]...
+};
+
+titles = {...
+    'Устойчивый узел',...
+    'Неустойчивый узел',...
+    'Дикритический узел',...
+    'Седло',...
+    'Фокус',...
+    'Центр'...
+};
+
+tspans = {...
+    [-5 5],...
+    [-1 0],...
+    [-5 5],...
+    [-1 1],...
+    [-0.1 1],...
+    [0 pi]...
+};
+
+for i = 1:N
+    subplot(2, 3, i);
+    ode_phase_plot(cell2mat(funcs(i)), cell2mat(tspans(i)), r, phi, cell2mat(titles(i)));
+end
+
+%% task7
+
+f1 = @(t, y) [y(1) .^ 3 - y(2); y(1) + y(2) .^ 3]; % неустойчива
+f2 = @(t, y) [2 * y(2) .^ 3 - y(1) .^ 5; -y(1) - y(2) .^ 3 + y(2) .^ 5]; % устойчива
+v1_func = @(y) y(:, 1) .^ 2 + y(:, 2) .^ 2;
+v2_func = @(y) y(:, 1) .^ 2 + y(:, 2) .^ 4;
+
+ncol = 20;
+colors = parula(ncol);
+nphi = 12;
+nr = 4;
+min_r = 0.1;
+max_r = 1.5;
+phi = (1:nphi) * 2*pi / nphi;
+r = linspace(min_r, max_r, nr);
+tspan = [0 20];
+
+t1 = [];
+y1 = [];
+
+for i = 1:nphi 
+    for j = 1:nr 
+        [t_tmp, y_tmp] = ode45(f1, tspan, [r(j) * cos(phi(i)); r(j) * sin(phi(i))]);
+        t1 = [t1; t_tmp];
+        y1 = [y1; y_tmp];
+    end
+end
+
+for i = 1:ncol 
+    
+end
