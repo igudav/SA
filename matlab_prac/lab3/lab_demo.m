@@ -127,13 +127,15 @@ phi = (1:nphi) * 2*pi / nphi;
 r = linspace(min_r, max_r, nr);
 N = 6;
 
+% Here we try to define functions both for ode45 and quiver.
+% Not perfect, but uniformly
 funcs = {...
-    @(t, y) [-5 * y(1); -3 * y(2)],...
-    @(t, y) [2 * y(1); y(2)],...
-    @(t, y) [-2 * y(1); -2 * y(2)],...
-    @(t, y) [y(1); -y(2)],...
-    @(t, y) [y(1) - 2 * y(2); y(2) + 3 * y(1)],...
-    @(t, y) [y(2); -y(1)]...
+    @(y1, y2) [-5 * y1, -3 * y2],...
+    @(y1, y2) [2 * y1, y2],...
+    @(y1, y2) [-2 * y1, -2 * y2],...
+    @(y1, y2) [y1, -y2],...
+    @(y1, y2) [y1 - 2 * y2, y2 + 3 * y1],...
+    @(y1, y2) [y2, -y1]...
 };
 
 titles = {...
@@ -161,32 +163,73 @@ end
 
 %% task7
 
-f1 = @(t, y) [y(1) .^ 3 - y(2); y(1) + y(2) .^ 3]; % неустойчива
-f2 = @(t, y) [2 * y(2) .^ 3 - y(1) .^ 5; -y(1) - y(2) .^ 3 + y(2) .^ 5]; % устойчива
+% same as in task6
+f1 = @(y1, y2) [y1 .^ 3 - y2, y1 + y2 .^ 3]; % unstable
+f2 = @(y1, y2) [2 * y2 .^ 3 - y1 .^ 5, -y1 - y2 .^ 3 + y2 .^ 5]; % stable
 v1_func = @(y) y(:, 1) .^ 2 + y(:, 2) .^ 2;
 v2_func = @(y) y(:, 1) .^ 2 + y(:, 2) .^ 4;
 
-ncol = 20;
-colors = parula(ncol);
-nphi = 12;
+nphi = 8;
 nr = 4;
-min_r = 0.1;
-max_r = 1.5;
+min_r = 0.01;
+max_r = 0.31;
 phi = (1:nphi) * 2*pi / nphi;
 r = linspace(min_r, max_r, nr);
-tspan = [0 20];
+tspan = [0 5];
 
-t1 = [];
-y1 = [];
+subplot(1, 2, 1);
+lyap_quiv(f1, tspan, r, phi, v1_func);
+title('unstable ode trajectories');
 
-for i = 1:nphi 
-    for j = 1:nr 
-        [t_tmp, y_tmp] = ode45(f1, tspan, [r(j) * cos(phi(i)); r(j) * sin(phi(i))]);
-        t1 = [t1; t_tmp];
-        y1 = [y1; y_tmp];
-    end
-end
+nphi = 4;
+nr = 3;
+min_r = 0.01;
+max_r = 0.1;
+phi = (1:nphi) * 2*pi / nphi;
+r = linspace(min_r, max_r, nr);
+tspan = [0 35];
 
-for i = 1:ncol 
-    
-end
+subplot(1, 2, 2);
+lyap_quiv(f2, tspan, r, phi, v2_func);
+title('stable ode trajectories');
+
+%% task8
+
+a = 0;
+b = pi;
+C = 1;
+y_theor = @(x) [C * sin(x) + 2 * x + pi * cos(x)  - pi; ones(size(x))];
+solinit = bvpinit(linspace(a, b, 100), y_theor);
+sol = bvp4c(@odefunc_task8, @bcfunc_task8, solinit);
+x = linspace(a, b, 100);
+y = deval(sol, x);
+yt = y_theor(x);
+plot(x, y(1, :), x, yt(1, :));
+title('boundary problem', 'interpreter', 'latex');
+legend('bvp4c', 'theoretical', 'interpreter', 'latex');
+
+fprintf('L2: %.5f\n', abs(trapz(x, yt(1, :) - y(1, :))));
+fprintf('C: %.5f\n', max(abs(yt(1, :) - y(1, :))));
+
+%% task9
+
+f = @(x) (1 - x(1)) .^ 2 + 100 * (x(2) - x(1) .^ 2) .^ 2;
+df = @df_task9;
+eps = 1e-6;
+x0 = [2; 2];
+[xmin, fmin, steps] = min_coord(f, df, x0, eps);
+
+[x, fval, ~, output] = fminsearch(f, [2; 2]);
+
+fprintf('coordinate descent:\nxmin = (%f, %f)\nfmin = %f\niterations: %f\n\n',...
+    xmin(1), xmin(2), fmin, size(steps, 2));
+fprintf('fminsearch:\nxmin = (%f, %f)\nfmin = %f\niterations: %f\n',...
+    x(1), x(2), fval, output.iterations);
+
+x = linspace(-2, 2, 100);
+y = linspace(-2, 2, 100);
+[X, Y] = meshgrid(x, y);
+Z = (ones(size(X)) - X) .^ 2 + 100 * (Y - X .^ 2) .^ 2;
+contour(X, Y, Z, 40);
+hold on;
+plot(steps(1, :), steps(2, :), 'r-o');

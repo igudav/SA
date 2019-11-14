@@ -1,2 +1,3 @@
 *.swp
-optimal_control/.ipynb_checkpoints/*
+*.swo
+/**/.ipynb_checkpionts/*
