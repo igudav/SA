@@ -199,7 +199,7 @@ a = 0;
 b = pi;
 C = 1;
 y_theor = @(x) [C * sin(x) + 2 * x + pi * cos(x)  - pi; ones(size(x))];
-solinit = bvpinit(linspace(a, b, 100), y_theor);
+solinit = bvpinit(linspace(a, b, 1000), y_theor);
 sol = bvp4c(@odefunc_task8, @bcfunc_task8, solinit);
 x = linspace(a, b, 100);
 y = deval(sol, x);
@@ -213,6 +213,7 @@ fprintf('C: %.5f\n', max(abs(yt(1, :) - y(1, :))));
 
 %% task9
 
+% Rosenbrock function
 f = @(x) (1 - x(1)) .^ 2 + 100 * (x(2) - x(1) .^ 2) .^ 2;
 df = @df_task9;
 eps = 1e-6;
@@ -221,6 +222,7 @@ x0 = [2; 2];
 
 [x, fval, ~, output] = fminsearch(f, [2; 2]);
 
+disp('Rosenbrock function:');
 fprintf('coordinate descent:\nxmin = (%f, %f)\nfmin = %f\niterations: %f\n\n',...
     xmin(1), xmin(2), fmin, size(steps, 2));
 fprintf('fminsearch:\nxmin = (%f, %f)\nfmin = %f\niterations: %f\n',...
@@ -233,3 +235,15 @@ Z = (ones(size(X)) - X) .^ 2 + 100 * (Y - X .^ 2) .^ 2;
 contour(X, Y, Z, 40);
 hold on;
 plot(steps(1, :), steps(2, :), 'r-o');
+
+f = @(x) x .^ 8;
+df = @(x, i) 8 * x .^ 7;
+eps = 1e-6;
+x0 = 2;
+[xmin, fmin, steps] = min_coord(f, df, x0, eps);
+[x, fval, ~, output] = fminbnd(f, -3, 3);
+fprintf('\nx^8:\n');
+fprintf('coordinate descent:\nxmin = %f\nfmin = %f\niterations: %f\nresidual = %f\n\n',...
+    xmin, fmin, size(steps, 2), abs(xmin));
+fprintf('fminsearch:\nxmin = %f\nfmin = %f\niterations: %f\nresidual = %f\n',...
+    x, fval, output.iterations, abs(x));

@@ -13,6 +13,21 @@
 \usepackage{pgfplots}
 \usepackage{caption}
 \usepackage{enumerate}
+\usepackage{titlesec}
+\usepackage{chngcntr}
+\usepackage{import}
+\usepackage{transparent}
+\usepackage{pdfpages}
+\usepackage{xifthen}
+
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+% секция с новой страницы
+\newcommand{\sectionbreak}{\clearpage}
 
 % отступы
 
@@ -48,7 +63,7 @@
 \makeatother
 
 \newcommand{\mdef}[1]{\emph{\colordashline{#1}}}
-\newcommand\eqdef{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\scriptsize def}}}{=}}}
+\newcommand\eqdef{\stackrel{\text{\tiny def}}{=}}
 \newcommand\iffdef{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\scriptsize def}}}{\iff}}}
 \newcommand\Real{\mathbb{R}}
 \newcommand\Nat{\mathbb{N}}
@@ -65,3 +80,6 @@
 
 \newcommand*{\hm}[1]{\nobreak\discretionary{}%
     {\hbox{$\mathsurround=0pt #1$}}{}}
+
+% нумерация
+\numberwithin{equation}{section}

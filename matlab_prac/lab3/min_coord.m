@@ -14,7 +14,6 @@ function [x, fval, steps] = min_coord(f, df, x0, eps)
         end
         if i == 1 &...
                 norm(steps(1:end-1, end) - steps(1:end-1, end-1)) < eps
-            disp(niter);
             x = x0;
             fval = steps(end, end);
             break;

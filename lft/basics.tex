@@ -1,4 +1,4 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[main.tex]{subfiles}
 \begin{document}
 \section{Введение}
 
@@ -8,7 +8,7 @@
     Тогда \mdef{рядом Фурье} для этой функции будем называть такого крокодила:
     \begin{equation}\label{eq:fourSer}
         f(x) = \frac{a_0}{2} + \sum\limits_{k=1}^{\infty}
-        a_k \cos kx + b_k \sin kx
+        (a_k \cos kx + b_k \sin kx)
     ,\end{equation}
     где
     \begin{equation}\label{eq:coeffFourSer}
@@ -61,5 +61,11 @@ $L_2$ полную ортогональную систему.
     \item $k$~---~частота комплексных гармонических колебаний,
     \item  $\arg c_k$~---~начальная фаза.
 \end{itemize} 
+
+Ну и для полного цимесу выпишем формулы для $C_k$ через интеграл от экспоненты.
+
+\begin{equation}\label{eq:coerrFourSerExp}
+    C_k = \frac{1}{2\pi} \int\limits_{-\pi}^{\pi} f(t) e^{-ikt}\,dt
+.\end{equation} 
 
 \end{document} 
