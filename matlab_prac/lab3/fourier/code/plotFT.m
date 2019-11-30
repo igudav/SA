@@ -68,7 +68,7 @@ function res = plotFT(hFigure, fHandle, fFTHandle, step, inpLimVec, outLimVec)
         plot(lmbd, real(fFTHandle(lmbd)), 'r');        
     end
     xlabel('$\lambda$', 'interpreter', 'latex');
-    ylabel('$\Re F(\lambda)$', 'interpreter', 'latex');
+    ylabel('$\mathrm{Re} F(\lambda)$', 'interpreter', 'latex');
     if isempty(SPlotInfo) || nargin > 5
         axis([c d y_min y_max]);
     end
@@ -81,7 +81,7 @@ function res = plotFT(hFigure, fHandle, fFTHandle, step, inpLimVec, outLimVec)
         plot(lmbd, imag(fFTHandle(lmbd)), 'r');        
     end
     xlabel('$\lambda$', 'interpreter', 'latex');
-    ylabel('$\Im F(\lambda)$', 'interpreter', 'latex');
+    ylabel('$\mathrm{Im} F(\lambda)$', 'interpreter', 'latex');
     if isempty(SPlotInfo) || nargin > 5
         axis([c d y_min y_max]);
     end
