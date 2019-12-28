@@ -28,14 +28,11 @@ void mexFunction(int nlhs, mxArray *plhs[],
         res[i] = (mxComplexDouble *) mxGetComplexDoubles(plhs[i]);
     }
 
-    mxComplexDouble *A, *B, *C;
-    A = (mxComplexDouble *) mxGetComplexDoubles(prhs[0]);
-    B = (mxComplexDouble *) mxGetComplexDoubles(prhs[1]);
-    C = (mxComplexDouble *) mxGetComplexDoubles(prhs[2]);
+    mxComplexDouble *A = (mxComplexDouble *) mxGetComplexDoubles(prhs[0]);
+    mxComplexDouble *B = (mxComplexDouble *) mxGetComplexDoubles(prhs[1]);
+    mxComplexDouble *C = (mxComplexDouble *) mxGetComplexDoubles(prhs[2]);
     complex roots[] = {0, 0, 0};
     
-    mexPrintf("%d\n", A);
-    return;
     for (size_t i = 0; i < mrows * ncols; ++i) {
         if (A[i].real * A[i].real + A[i].imag * A[i].imag < EPS) {
             mexErrMsgIdAndTxt("MATLAB:cubesolve:null_coeff", 
@@ -46,10 +43,13 @@ void mexFunction(int nlhs, mxArray *plhs[],
         complex q = (C[i].real + I * C[i].imag) / (A[i].real + I * A[i].imag);
         complex w = csqrt(cpow(p / 3, 3.0) + cpow(q / 2, 2.0));
         complex alpha = cpow(-q / 2 + w, 1.0 / 3.0);
-        complex beta = cpow(-q / 2 - w, 1.0 / 3.0);
+        // and here we need to rotate our beta becauose cpow calculates wrong branch
+        // of logarithm inside computing the complex power
+        complex beta = cpow(-q / 2 - w, 1.0 / 3.0) * (-0.5 - I * csqrt(3) / 2);
         
         roots[0] = -0.5 * (alpha + beta) + I * sqrt(3) / 2.0 * (alpha - beta);
         roots[1] = -0.5 * (alpha + beta) - I * sqrt(3) / 2.0 * (alpha - beta);
+
         if (nlhs == 3) {
             roots[2] = alpha + beta;
         }
