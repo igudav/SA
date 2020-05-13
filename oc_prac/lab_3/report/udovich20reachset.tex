@@ -1,0 +1,122 @@
+\documentclass[12pt, a4paper]{article} % свойства докуменат
+\usepackage[utf8]{inputenc} % хотим нормальную кодировку
+\usepackage[T2A]{fontenc} % тип шрифта, по-моему
+\usepackage[russian]{babel} % русские буквы и обозначения
+\usepackage{graphicx, xcolor} % графика
+\usepackage{subfiles} % царская разбивка на много файлов
+\usepackage{amsmath} % различные нужные символы, типа \geqslant
+\usepackage{amssymb} % еще немного символов
+\usepackage{import} % для включения рисунков
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{titlesec} % для настройки заголовков и секций вообще
+\usepackage{caption} % для подписей к рисункам на 2 строки
+\usepackage[outdir=./figures/]{epstopdf}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{mathrsfs}
+
+% комманда для царского добавления в документ векторной графики
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+\newcommand\eqdef{\stackrel{\text{\tiny def}}{=}}
+
+\newtheorem{Th}{Теорема}
+
+% русские знаки нестрогих неравенств
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+\renewcommand{\emptyset}{\varnothing}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\inner}[2]{\bigl< #1, #2 \bigr>}
+
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}%
+            {\hbox{\mathsurround=0pt #1}}{}}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\Large\bfseries}{\thesubsection.}{1em}{}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\Argmax}{Argmax}
+\DeclareMathOperator{\sgn}{sgn}
+
+% \counterwithin{section}{part}
+
+\graphicspath{~/sa/oc_prac/lab_1/report/figures}
+
+\begin{document}
+
+\subfile{titul.tex}
+
+\tableofcontents
+
+\newpage
+
+\part{Теоретическая часть}
+
+\section{Постановка задач}
+
+Задано обыкновенное дифференциальное уравнение:
+\begin{equation}\label{eq:init_prob}
+    \ddot x - x^2 \sin x + x^3 + x^{4} + 2 \dot x = u,
+\end{equation} 
+где $x \in \Real$,  $u \in [-\alpha, \alpha]$.
+В начальный момент времени $x(0) = \dot x(0) \hm= 0$. 
+Необходимо построить множество достижимости $X(t, t_0, x(t_0), \dot x(t_0))$
+в классе программынх управлений в заданный момент времени $t \ge t_0$.
+
+Сведем данное дифференциальное уравнение к системе уравнений 1-го порядка:
+\begin{equation}\label{eq:init_sys}
+    \begin{cases}
+        \dot x_1 = x_2, \\
+        \dot x_2 = u - 2x_2 -x_1^3 - x_1^{4} + x_1^2 \sin x_1.
+    \end{cases}
+\end{equation} 
+Начальные условия: $x_1(0) = 0,\ x_2(0) = 0$.
+
+\section{Вспомогательные утверждения}
+
+Сформулируем принцип максимума Понтрягина для задач достижимости.
+Он доказан в~\cite{Komar}
+
+\begin{Th}[ПМП для задачи достижимости]\label{th:pmp}
+    Рассматривается следующая автономная система:
+    \begin{equation}\label{eq:pmp_sys}
+        \dot x = f(x(t), u(t)).
+    \end{equation} 
+    Дополнительно предполагаем, что функции $f$ и $f'_x$ непрервыны,
+    и ограничения на управление и не зависят от времени:
+    $u(t) \in \mathcal{P} \subset \Real^{m}\ \dot \forall t$.
+    Введем функцию Гамильтона-Понтрягина:
+    \begin{equation}\label{eq:pmp_ham}
+        \mathcal{H} \bigl( \psi(t), x(t), u(t) \bigr) = 
+        \inner{\psi(t)}{f( x(t), u(t) )}.
+    \end{equation} 
+    Тогда если $(u^*, x^*)$"---~оптимальная пара,
+    такая что  $x^*(t) \in \partial X(t)$, то существует функция $\psi^*(t)$,
+    удовлетворяющая сопряженной системе:
+    \begin{equation}\label{pmp_conj}
+        \dot \psi = -\frac{\partial \mathcal{H}}{\partial x},
+    \end{equation} 
+    для которой выполнено условия максимума:
+    \begin{equation}\label{eq:pmp_pmp}
+         \mathcal{H} \bigl(\psi^*(t), x^*(t), u^*(t)\bigr) = 
+         \sup\limits_{v \in \mathcal{P}} \mathcal{H} \bigl(\psi^*(t), x^*(t), v\bigr).
+    \end{equation} 
+\end{Th} 
+Эта теорема позволяет использовать для построения границы множества
+достижимости только те траектории, которые удовлетворяют условию максимума~\eqref{eq:pmp_pmp}.
+
+\bibliographystyle{utf8gost705u}
+\bibliography{biblio}
+
+ \end{document} 
