@@ -27,6 +27,8 @@
 \newcommand\eqdef{\stackrel{\text{\tiny def}}{=}}
 
 \newtheorem{Th}{Теорема}
+\newtheorem{Lem}{Лемма}
+\newenvironment{Proof}{\par\noindent{\bf Доказательство.}}{\hfill$\scriptstyle\blacksquare$}
 
 % русские знаки нестрогих неравенств
 \renewcommand{\le}{\leqslant}
@@ -115,6 +117,66 @@
 \end{Th} 
 Эта теорема позволяет использовать для построения границы множества
 достижимости только те траектории, которые удовлетворяют условию максимума~\eqref{eq:pmp_pmp}.
+
+Сформулируем также теорему, которая позволяет указать структуру переключений управления в нашей системе.
+Доказательство приведено в~\cite{Komar}.
+\begin{Th}[о нулях $x_2$ и $\psi_2$]
+    Пусть $t_1 < t_2$, $x_2(t_1) = x_2(t_2) = 0$, $x_2$ не обращается в нуль 
+    на $(t_1, t_2)$ и $\psi_2(t_1) \neq 0$.
+    Тогда $\psi_2(t_2) \neq 0$ и существует $\tau \in (t_1, t_2)$, 
+    такое что $\psi_2(\tau) = 0$.
+\end{Th} 
+Смысл теоремы в том, что между двумя моментами времени, в который $x_2$ обращается в $0$,
+существует момент времени, в который  $\psi_2$ обращается в $0$.
+
+\section{Исследование задачи}
+
+Запишем для заданной задачи функционал Гамильтона-Понтрягина и сопряженную систему:
+\begin{equation}\label{eq:prb_ham}
+    \mathcal{H} = \psi_1 x_2 + \psi_2 \left( u - 2x_2 -x_1^3 - x_1^{4} + x_1^2 \sin x_1 \right)
+\end{equation} 
+\begin{equation}\label{eq:prb_conj}
+    \begin{cases}
+        \dot \psi_1 = \psi_2 \left( 3x_1^2 + 4x_1^3 - 2x_1\sin x_1 - 
+            x_1^2\cos x_1\right), \\
+        \dot \psi_2 = -\psi_1 + 2\psi_2. 
+    \end{cases} 
+\end{equation} 
+
+Из функционала Гамильтона-Понтрягина выпишем вид экстремальных управлений:
+\begin{equation}\label{prb_controls}
+    u^* = 
+    \begin{cases}
+        \alpha, & \psi_2 > 0, \\
+        [-\alpha, \alpha], & \psi_2 = 0, \\
+        -\alpha, & \psi_2 < 0.
+    \end{cases} 
+\end{equation} 
+
+\begin{Lem}
+    Особый режим в данной задаче невозможен.
+\end{Lem} 
+\begin{Proof}
+    Будем доказывать от противного: предположим, что $\psi_2 = 0$ на некотором интервале.
+    Тогда и $\dot \psi_2 = 0$ на этом интервале.
+    Тогда в силу 2-го уравнения системы~\eqref{eq:prb_conj} $\psi_1 = 0$ на этом интервале. 
+    Получаем противоречие с условием нетривиальности сопряженных переменных.
+\end{Proof} 
+
+Таким образом, система движется в одном из двух режимов:
+\begin{equation}\label{prb_pos}\tag{$+$}
+    \begin{cases}
+        \dot x_1 = x_2, \\
+        \dot x_2 = \alpha - 2x_2 -x_1^3 - x_1^{4} + x_1^2 \sin x_1.
+    \end{cases}
+\end{equation} 
+
+\begin{equation}\label{prb_neg}\tag{$-$}
+    \begin{cases}
+        \dot x_1 = x_2, \\
+        \dot x_2 = -\alpha - 2x_2 -x_1^3 - x_1^{4} + x_1^2 \sin x_1.
+    \end{cases}
+\end{equation} 
 
 \bibliographystyle{utf8gost705u}
 \bibliography{biblio}
